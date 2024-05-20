@@ -26,6 +26,7 @@ function Description({
           variant="standard"
           value={text}
           name="description"
+          required
           onChange={handleChange}
           onFocus={handleFocus}
         />

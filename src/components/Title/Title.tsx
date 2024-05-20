@@ -20,8 +20,10 @@ function Title({
           onFocus={handleFocus}
           onChange={handleChange}
           disableUnderline
+          required
           inputProps={{
             "aria-label": "title",
+            maxLength: 20,
           }}
         />
       ) : (

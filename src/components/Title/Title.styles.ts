@@ -20,4 +20,5 @@ export const StyledTypography = styled(Typography)({
   fontSize: "1rem",
   display: "flex",
   alignItems: "center",
+wordWrap: "break-word"
 });

@@ -32,13 +32,21 @@ function CardContentComponent({
   const { title, description, image } = formData;
   const [isFilled, setIsFilled] = useState<boolean>(false);
 
-  useEffect(() => {
-    setIsFilled(
+  const checkIfFilled = () => {
+    return (
+      title !== INITIAL_VALUES.title &&
       image.imageSrc !== INITIAL_VALUES.image.imageSrc &&
-        title !== INITIAL_VALUES.title &&
-        description !== INITIAL_VALUES.description
+      description !== INITIAL_VALUES.description &&
+      title !== "" &&
+      description !== "" &&
+      image.imageSrc !== ""
     );
+  };
+
+  useEffect(() => {
+    setIsFilled(checkIfFilled());
   }, [title, description, image.imageSrc]);
+
 
   useEffect(() => {
     if (!isInteractive) {
@@ -72,14 +80,13 @@ function CardContentComponent({
     }
   };
 
-   const submitFunction = async (e: FormEvent<HTMLFormElement>) => {
+  const submitFunction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (handleSubmit) {
       handleSubmit(e, title, description, image);
     }
     setFormData(INITIAL_VALUES);
   };
-
 
   const formElements = (
     <>
