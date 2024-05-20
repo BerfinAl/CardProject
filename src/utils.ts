@@ -21,7 +21,6 @@ const cardsCollection = collection(db, "cards");
 export const uploadImage = async (file: File) => {
   const storageRef = ref(storage, `images/${file.name}`);
   await uploadBytes(storageRef, file);
-  console.log(storageRef);
   const downloadURL = await getDownloadURL(storageRef);
   return downloadURL;
 };

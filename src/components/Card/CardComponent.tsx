@@ -1,4 +1,3 @@
-
 import { PropsWithChildren } from 'react'
 import Label from "../Label/Label";
 import { StyledBox, StyledCard, StyledCardContent } from './Card.styles';

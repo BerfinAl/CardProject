@@ -16,7 +16,7 @@ type FormDataStateType = {
 interface CardContentProps {
   isInteractive: boolean;
   handleSubmit?: SubmitFnType;
-};
+}
 
 function CardContentComponent({
   isInteractive,
@@ -28,43 +28,36 @@ function CardContentComponent({
     image: { file: null, imageSrc: "" },
   };
 
-  const [formData, setFormData] = useState<FormDataStateType>({
-    title: INITIAL_VALUES.title,
-    description: INITIAL_VALUES.description,
-    image: INITIAL_VALUES.image,
-  });
-
+  const [formData, setFormData] = useState<FormDataStateType>(INITIAL_VALUES);
   const { title, description, image } = formData;
-
-  const [isFilled, setIsFilled] = useState<Boolean>(false);
+  const [isFilled, setIsFilled] = useState<boolean>(false);
 
   useEffect(() => {
-    checkIsFilled(title, description, image.imageSrc);
+    setIsFilled(
+      image.imageSrc !== INITIAL_VALUES.image.imageSrc &&
+        title !== INITIAL_VALUES.title &&
+        description !== INITIAL_VALUES.description
+    );
   }, [title, description, image.imageSrc]);
 
   useEffect(() => {
     if (!isInteractive) {
       getLatestCard(setFormData);
     }
-  }, []);
+  }, [isInteractive]);
 
   function handleFocus(e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (isInteractive) return e.target.select();
   }
 
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: keyof FormDataStateType
+  ) => {
+    const value = e.target.value;
     setFormData((prev) => ({
       ...prev,
-      title: newTitle,
-    }));
-  };
-
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newDescription = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      description: newDescription,
+      [field]: value,
     }));
   };
 
@@ -79,45 +72,26 @@ function CardContentComponent({
     }
   };
 
-  const checkIsFilled = (
-    newTitle: string,
-    newDescription: string,
-    newImageInput: string
-  ) => {
-    setIsFilled(
-      newImageInput !== INITIAL_VALUES.image.imageSrc &&
-        newTitle !== INITIAL_VALUES.title &&
-        newDescription !== INITIAL_VALUES.description
-    );
-  };
-
-const submitFunction = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  try {
+   const submitFunction = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (handleSubmit) {
       handleSubmit(e, title, description, image);
-    } else {
-      console.error("handleSubmit is undefined");
     }
-
     setFormData(INITIAL_VALUES);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
 
   const formElements = (
     <>
       <Title
         text={title}
-        handleChange={handleTitleChange}
+        handleChange={(e) => handleChange(e, "title")}
         handleFocus={handleFocus}
         isInteractive={isInteractive}
       />
       <Description
         text={description}
-        handleChange={handleDescriptionChange}
+        handleChange={(e) => handleChange(e, "description")}
         handleFocus={handleFocus}
         isInteractive={isInteractive}
       />
